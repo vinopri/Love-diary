@@ -1,0 +1,208 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Dancing Script', cursive;
+  background: linear-gradient(to right, #ffe4e1, #ffb6c1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+  text-align: center;
+}
+
+.login-container h2 {
+  color: #ff69b4;
+  margin-bottom: 20px;
+}
+
+input {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 20px;
+  background: #ff69b4;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ff1493;
+}
+.menu-icon {
+  font-size: 28px;
+  background-color: #ff69b4;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 20px;
+  transition: 0.3s ease;
+}
+
+nav.hidden {
+  display: none;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+}
+
+nav li {
+  margin: 12px 0;
+}
+
+nav a {
+  text-decoration: none;
+  background-color: #ff69b4;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  display: inline-block;
+  transition: 0.3s ease;
+}
+
+nav a:hover {
+  background-color: #ff1493;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(to bottom, #ffe0e9, #ffd6ec);
+  text-align: center;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff0f5;
+  padding: 10px 20px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.left-header {
+  display: flex;
+  align-items: center;
+}
+
+.menu-icon {
+  background-color: #ff69b4;
+  color: white;
+  padding: 10px 15px;
+  font-size: 24px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.auth-links a {
+  margin-left: 15px;
+  text-decoration: none;
+  color: #d63384;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.home-container {
+  margin-top: 100px;
+}
+
+.surprise-btn {
+  margin-top: 30px;
+  background-color: #ff5cad;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 30px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255,105,180,0.3);
+  transition: transform 0.2s;
+}
+
+.surprise-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Toggle Menu */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px auto;
+}
+
+nav li {
+  margin: 10px 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #d63384;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+/* Sidebar menu hidden initially */
+#menu {
+  position: fixed;
+  top: 60px; /* Below the header */
+  left: 0;
+  width: 220px;
+  background-color: #ffe6f0;
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  z-index: 999;
+  transition: transform 0.3s ease;
+}
+
+/* Hide by sliding it out of view */
+.hidden {
+  transform: translateX(-250px);
+}
+
+/* When shown, slide into view */
+#menu:not(.hidden) {
+  transform: translateX(0);
+}
+
+#menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#menu li {
+  margin: 15px 0;
+}
+
+#menu a {
+  text-decoration: none;
+  color: #d63384;
+  font-weight: bold;
+  font-size: 18px;
+}

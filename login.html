@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Our Love</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="login-page">
+  <div class="login-container"><center>
+    <h2>Welcome Back 💖</h2>
+    <form id="loginForm">
+      <input type="text" placeholder="Your Name" required /><br>
+      <input type="password" placeholder="Secret Password" required /><br>
+      <button type="submit">Login</button>
+    </form><br>
+    <p>New here? <a href="signup.html">Sign up now</a></p>
+  </div></center>
+
+<script>
+  document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = e.target[0].value.trim();
+    const password = e.target[1].value.trim();
+
+    const registeredName = localStorage.getItem("loveUser");
+    const registeredPassword = localStorage.getItem("lovePass");
+
+    if (name === registeredName && password === registeredPassword) {
+      alert("Login successful 💖");
+      window.location.href = "index.html";
+    } else {
+      alert("You're not registered or wrong details 💔 Please sign up first.");
+    }
+  });
+</script>
+
+
+</body>
+</html>

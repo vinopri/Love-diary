@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home - Our Love</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <div class="left-header">
+      <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    </div>
+  </header>
+
+  <div class="home-container">
+    <h1>Hi My Love 💖</h1>
+    <p id="greetingMsg"></p>
+    <p id="quoteOfTheDay"></p>
+
+    <button class="surprise-btn" onclick="location.href='login.html'">🎁 Surprise</button>
+  
+
+    <!-- Toggle Menu -->
+    <nav id="menu" class="hidden">
+      <ul>
+        <li><a href="love-calculator.html">💑 Love Calculator</a></li>
+        <li><a href="secret.html">📜 Secret Letter</a></li>
+        <li><a href="puzzle.html">🧩 Love Puzzle</a></li>
+        <li><a href="notes.html">📝 Notes</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <script>
+    // Greeting message
+    const now = new Date();
+    const hrs = now.getHours();
+    let greet = "Good Evening 🌙";
+    if (hrs < 12) greet = "Good Morning ☀️";
+    else if (hrs < 18) greet = "Good Afternoon 🌸";
+    document.getElementById("greetingMsg").innerText = greet;
+
+    // Daily quote
+    const quotes = [
+      "You're my today and all of my tomorrows.",
+      "In your smile, I see something more beautiful than the stars.",
+      "You're not my number one. You're my only one.",
+      "Every love story is beautiful, but ours is my favorite."
+    ];
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById("quoteOfTheDay").innerText = quote;
+
+    function toggleMenu() {
+      document.getElementById("menu").classList.toggle("hidden");
+    }
+
+    const quotesByWeek = [
+      [ "You’re my first thought every morning 💭", "Your smile is my favorite sunrise ☀️", "Even cloudy days are warm with your love 🌦", "You’re stronger than you think, my love 💪", "Our love grows with every heartbeat 💓", "You’re my peace and my passion 😌🔥", "No one loves you like I do 💘" ],
+      [ "Another day to be yours ❤️", "You light up my darkest mornings 🌄", "Hold on, I believe in you 💫", "The world is better with you in it 🌍", "You’re my sunshine and storm 💞", "Saturday cuddles from far away 🤗", "Forever isn’t enough with you 🕊️" ],
+      [ "Wake up, you’re loved 🌸", "You're the reason I smile 💕", "Midweek hugs just for you 🤗", "You're doing amazing, keep going ✨", "Let love guide your day 💓", "Relax baby, you deserve it 🌷", "My heart is with you always 💖" ]
+    ];
+
+    const dailyReminders = {
+      7: () => `🌞 Good Morning! ${getDailyQuote()}`,
+      8.5: () => "🍽 Don’t skip breakfast dear 💕",
+      11: () => "💧 Drink water baby 💧 Stay healthy!",
+      13: () => "🍱 Lunch time! Think of me while eating 😋",
+      15: () => "💦 Water break! Your health is precious 💖",
+      17: () => "☕ Evening tea or coffee — imagine we’re sipping together 💑",
+      19: () => "🕖 I’m waiting for you baby… miss you every second 🥺",
+      21: () => "🍽 Dinner time — eat well and rest properly!",
+      23: () => "🌙 Good Night sweetheart 💫 Dream of us ❤️"
+    };
+
+    function getCurrentWeekIndex() {
+      const startDate = new Date("2025-01-01");
+      const now = new Date();
+      return Math.floor((now - startDate) / (7 * 24 * 60 * 60 * 1000)) % 3;
+    }
+
+    function getDailyQuote() {
+      const dayIndex = (new Date().getDay() + 6) % 7;
+      return quotesByWeek[getCurrentWeekIndex()][dayIndex];
+    }
+
+    function vibrateOnly() {
+      if ("vibrate" in navigator) navigator.vibrate(100);
+    }
+
+    function showLoveNotification(text) {
+      if (Notification.permission === "granted") {
+        new Notification("💕 Love Reminder 💕", {
+          body: text,
+          icon: "assets/images/heart-icon.png" // optional
+        });
+        vibrateOnly();
+      }
+    }
+
+    function checkReminders() {
+      const now = new Date();
+      const currentHours = now.getHours();
+      const currentMinutes = now.getMinutes();
+
+      Object.entries(dailyReminders).forEach(([hourKey, msgFunc]) => {
+        const floatHour = parseFloat(hourKey);
+        const targetHour = Math.floor(floatHour);
+        const targetMinute = Math.round((floatHour % 1) * 60);
+
+        if (currentHours === targetHour && currentMinutes === targetMinute) {
+          console.log(`✅ Reminder at ${targetHour}:${targetMinute}`);
+          showLoveNotification(msgFunc());
+        }
+      });
+    }
+
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission().then(permission => {
+        console.log("Notification permission:", permission);
+      });
+    }
+
+    setInterval(checkReminders, 60000); // Check every minute
+  </script>
+</body>
+</html>

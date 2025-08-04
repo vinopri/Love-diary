@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Love Notes 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #ffe4e1, #ffb6c1);
+      font-family: 'Dancing Script', cursive;
+      padding: 20px;
+      margin: 0;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff1493;
+    }
+
+    textarea, input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      border: 2px solid #ff69b4;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: cursive;
+      resize: vertical;
+    }
+
+    .emoji-list {
+      margin-bottom: 10px;
+    }
+
+    .emoji-list span {
+      font-size: 20px;
+      margin: 4px;
+      cursor: pointer;
+    }
+
+    button {
+      margin-top: 10px;
+      background-color: #ff69b4;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .note-card {
+      background: #fff0f5;
+      margin-top: 20px;
+      padding: 15px;
+      border-left: 5px solid #ff69b4;
+      border-radius: 12px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .note-card small {
+      display: block;
+      color: gray;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .delete-btn {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .search-box {
+      margin-bottom: 10px;
+    }
+
+    @media screen and (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>My Secret Love Notes 💖</h2>
+
+    <input type="text" id="searchBox" placeholder="🔍 Search notes..." class="search-box" onkeyup="displayNotes()" />
+
+    <textarea id="noteInput" placeholder="Write something beautiful..."></textarea>
+    <input type="password" id="notePassword" placeholder="Add password 🔐"/>
+    
+    <div class="emoji-list">
+      Add emojis:
+      <span onclick="addEmoji('💖')">💖</span>
+      <span onclick="addEmoji('😘')">😘</span>
+      <span onclick="addEmoji('🐻')">🐻</span>
+      <span onclick="addEmoji('🌙')">🌙</span>
+      <span onclick="addEmoji('🎶')">🎶</span>
+      <span onclick="addEmoji('🫶')">🫶</span>
+    </div>
+
+    <button onclick="saveNote()">➕ Add Note</button>
+    <button onclick="downloadNotes()">📥 Download All</button>
+
+    <div id="notesList"></div>
+  </div>
+
+  <script>
+    let isDark = false;
+
+    function addEmoji(emoji) {
+      document.getElementById("noteInput").value += emoji;
+    }
+
+    function saveNote() {
+      const noteText = document.getElementById("noteInput").value.trim();
+      const notePassword = document.getElementById("notePassword").value.trim();
+
+      if (!noteText) return alert("Note is empty!");
+
+      const bg = prompt("Optional: Background emoji or word? (e.g. 🌸, 🌙, 🐻)");
+
+      const note = {
+        text: noteText,
+        password: notePassword,
+        date: new Date().toLocaleString(),
+        bg: bg || ""
+      };
+
+      const notes = JSON.parse(localStorage.getItem("loveNotes") || "[]");
+      notes.push(note);
+      localStorage.setItem("loveNotes", JSON.stringify(notes));
+
+      document.getElementById("noteInput").value = "";
+      document.getElementById("notePassword").value = "";
+
+      displayNotes();
+    }
+
+    function deleteNote(index) {
+      const notes = JSON.parse(localStorage.getItem("loveNotes") || "[]");
+      notes.splice(index, 1);
+      localStorage.setItem("loveNotes", JSON.stringify(notes));
+      displayNotes();
+    }
+
+    function displayNotes() {
+      const container = document.getElementById("notesList");
+      const search = document.getElementById("searchBox").value.toLowerCase();
+      const notes = JSON.parse(localStorage.getItem("loveNotes") || "[]");
+
+      container.innerHTML = notes.map((note, index) => {
+        if (search && !note.text.toLowerCase().includes(search)) return '';
+
+        let bgStyle = "";
+        if (note.bg.includes("🌸")) bgStyle = "background:#fff0f5;";
+        else if (note.bg.includes("🌙")) bgStyle = "background:#e6e6fa;";
+        else if (note.bg.includes("🐻")) bgStyle = "background:#f5f5dc;";
+        else if (note.bg.includes("💖")) bgStyle = "background:#ffe4e1;";
+
+        let content = note.password
+          ? `<em>🔒 This note is protected.</em><br><button onclick="unlockNote(${index})">🔓 Unlock</button>`
+          : `${note.text}<small>🕰 ${note.date}</small><button class="delete-btn" onclick="deleteNote(${index})">🗑</button>`;
+
+        return `<div class="note-card" style="${bgStyle}" id="note-${index}">${content}</div>`;
+      }).join("");
+    }
+
+    function unlockNote(index) {
+      const password = prompt("Enter password to unlock:");
+      const notes = JSON.parse(localStorage.getItem("loveNotes") || "[]");
+
+      if (notes[index].password === password) {
+        document.getElementById(`note-${index}`).innerHTML = `
+          ${notes[index].text}
+          <small>🕰 ${notes[index].date}</small>
+          <button class="delete-btn" onclick="deleteNote(${index})">🗑</button>
+        `;
+      } else {
+        alert("Wrong password 💔");
+      }
+    }
+
+    function downloadNotes() {
+      const notes = JSON.parse(localStorage.getItem("loveNotes") || "[]");
+      if (!notes.length) return alert("No notes to download!");
+
+      const text = notes.map(n => `📝 ${n.text}\n📅 ${n.date}\n\n`).join("");
+      const blob = new Blob([text], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "my-love-notes.txt";
+      link.click();
+    }
+
+    function toastMessage(msg) {
+      const div = document.createElement("div");
+      div.textContent = msg;
+      div.style.cssText = `
+        position: fixed; bottom: 20px; left: 50%;
+        transform: translateX(-50%);
+        background: #ff69b4; color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 16px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+      `;
+      document.body.appendChild(div);
+      navigator.vibrate(150);
+      setTimeout(() => div.remove(), 3000);
+    }
+
+    function showWeeklyReminder() {
+      const notes = JSON.parse(localStorage.getItem("loveNotes") || "[]");
+      if (notes.length) {
+        const randomNote = notes[Math.floor(Math.random() * notes.length)];
+        toastMessage("💌 Weekly Reminder:\n" + randomNote.text);
+      }
+    }
+
+    function showDailyReminder() {
+      const hour = new Date().getHours();
+      const msgs = {
+        7: "🌞 Good Morning! Write a lovely thought 💌",
+        13: "🍱 Lunch time! How’s your heart today?",
+        21: "🌙 Sweet night. Don't sleep with unsent love 💭"
+      };
+      if (msgs[hour]) toastMessage(msgs[hour]);
+    }
+
+    function toggleMode() {
+      isDark = !isDark;
+      document.body.style.background = isDark ? "#1a1a1a" : "linear-gradient(to right, #ffe4e1, #ffb6c1)";
+      document.body.style.color = isDark ? "#fff" : "#000";
+    }
+
+    window.onload = () => {
+      displayNotes();
+      const day = new Date().getDay(); // Sunday = 0
+      if (day === 0) showWeeklyReminder();
+      showDailyReminder();
+
+      const toggle = document.createElement("button");
+      toggle.textContent = "🌓 Toggle Mode";
+      toggle.onclick = toggleMode;
+      toggle.style.position = "fixed";
+      toggle.style.top = "10px";
+      toggle.style.right = "10px";
+      toggle.style.zIndex = "9999";
+      toggle.style.borderRadius = "20px";
+      toggle.style.background = "#222";
+      toggle.style.color = "#fff";
+      toggle.style.padding = "8px 12px";
+      toggle.style.border = "none";
+      toggle.style.cursor = "pointer";
+      document.body.appendChild(toggle);
+    };
+  </script>
+</body>
+</html>
